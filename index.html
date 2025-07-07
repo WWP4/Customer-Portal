@@ -10,11 +10,7 @@
       background: #f9fafb;
       font-family: 'Montserrat', 'Inter', Arial, sans-serif;
     }
-    /* Hide scrollbar for sidebar */
-    ::-webkit-scrollbar {
-      width: 0px;
-      background: transparent;
-    }
+    ::-webkit-scrollbar { width: 0px; background: transparent; }
   </style>
 </head>
 <body>
@@ -26,37 +22,37 @@
         <span class="ml-3 font-bold text-2xl tracking-tight">Wonder World</span>
       </div>
       <nav class="flex-1 px-4 py-4 space-y-1 text-base">
-        <a href="#" class="flex items-center px-3 py-3 rounded-xl bg-blue-800 font-semibold gap-3">
+        <a href="index.html" class="flex items-center px-3 py-3 rounded-xl bg-blue-800 font-semibold gap-3">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
           Dashboard
         </a>
-        <a href="#" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
+        <a href="projects.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
           Projects
         </a>
-        <a href="#" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
+        <a href="quotes.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/></svg>
           Quotes
         </a>
-        <a href="#" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
+        <a href="grants.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
           Grants
         </a>
-        <a href="#" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
+        <a href="resources.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
           Resources
         </a>
-        <a href="#" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
+        <a href="community.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
           Community
         </a>
-        <a href="#" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
+        <a href="support.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
           Support
         </a>
       </nav>
       <div class="mb-8 px-4">
-        <button class="w-full bg-blue-700 hover:bg-blue-600 py-3 rounded-xl font-semibold shadow mt-6">Contact Support</button>
+        <a href="support.html" class="w-full block text-center bg-blue-700 hover:bg-blue-600 py-3 rounded-xl font-semibold shadow mt-6">Contact Support</a>
       </div>
     </aside>
 
@@ -76,10 +72,10 @@
 
       <!-- Action Buttons -->
       <div class="flex gap-4 mb-8">
-        <button class="bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-xl px-6 py-3 shadow text-lg">Start New Project</button>
-        <button class="bg-white border border-blue-300 hover:bg-blue-100 text-blue-700 font-semibold rounded-xl px-6 py-3 shadow text-lg">Resume Project</button>
-        <button class="bg-white border border-blue-300 hover:bg-blue-100 text-blue-700 font-semibold rounded-xl px-6 py-3 shadow text-lg">See Quotes</button>
-        <button class="bg-white border border-blue-300 hover:bg-blue-100 text-blue-700 font-semibold rounded-xl px-6 py-3 shadow text-lg">Book a Consult</button>
+        <a href="projects.html" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-xl px-6 py-3 shadow text-lg">Start New Project</a>
+        <a href="projects.html" class="bg-white border border-blue-300 hover:bg-blue-100 text-blue-700 font-semibold rounded-xl px-6 py-3 shadow text-lg">Resume Project</a>
+        <a href="quotes.html" class="bg-white border border-blue-300 hover:bg-blue-100 text-blue-700 font-semibold rounded-xl px-6 py-3 shadow text-lg">See Quotes</a>
+        <a href="support.html" class="bg-white border border-blue-300 hover:bg-blue-100 text-blue-700 font-semibold rounded-xl px-6 py-3 shadow text-lg">Book a Consult</a>
       </div>
 
       <!-- Widgets/Stats Row -->
@@ -93,7 +89,7 @@
           </svg>
           <div class="text-2xl font-bold text-blue-900">42% Complete</div>
           <div class="text-blue-700 text-sm mb-3">Jefferson Elementary Project</div>
-          <button class="bg-blue-700 text-white rounded-lg py-2 px-4 mt-2 font-semibold">View Project</button>
+          <a href="projects.html" class="bg-blue-700 text-white rounded-lg py-2 px-4 mt-2 font-semibold">View Project</a>
         </div>
         <!-- Grants/Fundraising Widget -->
         <div class="bg-white rounded-2xl shadow p-7 flex flex-col">
@@ -103,14 +99,14 @@
             <span class="text-green-600 text-xl font-bold">$14,000</span>
             <span class="ml-2 text-blue-700 text-sm">Available</span>
           </div>
-          <button class="bg-blue-100 text-blue-900 rounded-lg py-2 px-4 mb-2 font-semibold">View Grant Options</button>
+          <a href="grants.html" class="bg-blue-100 text-blue-900 rounded-lg py-2 px-4 mb-2 font-semibold text-center">View Grant Options</a>
         </div>
         <!-- Resource Center Widget -->
         <div class="bg-white rounded-2xl shadow p-7 flex flex-col">
           <div class="font-semibold text-blue-900 text-xl mb-2">Resource Center</div>
-          <a href="#" class="block text-blue-700 underline mb-1 font-semibold">Catalog PDF</a>
-          <a href="#" class="block text-blue-700 underline mb-1 font-semibold">Install Guide</a>
-          <a href="#" class="block text-blue-700 underline font-semibold">Fundraising Kit</a>
+          <a href="resources.html#catalog" class="block text-blue-700 underline mb-1 font-semibold">Catalog PDF</a>
+          <a href="resources.html#install" class="block text-blue-700 underline mb-1 font-semibold">Install Guide</a>
+          <a href="resources.html#fundraising" class="block text-blue-700 underline font-semibold">Fundraising Kit</a>
         </div>
       </div>
 
@@ -120,20 +116,19 @@
         <div class="col-span-2 bg-white rounded-2xl shadow p-7">
           <div class="font-semibold text-blue-900 text-xl mb-4">Active Projects</div>
           <div class="space-y-3">
-            <!-- Repeat for each project -->
             <div class="bg-blue-50 rounded-lg p-5 flex items-center justify-between">
               <div>
                 <div class="font-semibold text-blue-800 text-lg">Jefferson Elementary</div>
                 <div class="text-blue-600 text-sm">Planning &middot; $42,000</div>
               </div>
-              <button class="bg-blue-700 text-white rounded-lg px-4 py-2 font-semibold hover:bg-blue-800">View</button>
+              <a href="projects.html" class="bg-blue-700 text-white rounded-lg px-4 py-2 font-semibold hover:bg-blue-800">View</a>
             </div>
             <div class="bg-blue-50 rounded-lg p-5 flex items-center justify-between">
               <div>
                 <div class="font-semibold text-blue-800 text-lg">Springfield Church</div>
                 <div class="text-blue-600 text-sm">Quoted &middot; $36,000</div>
               </div>
-              <button class="bg-blue-700 text-white rounded-lg px-4 py-2 font-semibold hover:bg-blue-800">View</button>
+              <a href="projects.html" class="bg-blue-700 text-white rounded-lg px-4 py-2 font-semibold hover:bg-blue-800">View</a>
             </div>
           </div>
         </div>
@@ -159,7 +154,7 @@
       <div class="mt-12 flex justify-center">
         <div class="inline-flex items-center gap-2 bg-blue-100 rounded-xl px-8 py-4 shadow">
           <svg class="w-6 h-6 text-blue-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
-          <span class="text-blue-900 font-semibold text-lg">Need help? <a href="#" class="underline">Contact Support</a> or chat with WonderBot.</span>
+          <span class="text-blue-900 font-semibold text-lg">Need help? <a href="support.html" class="underline">Contact Support</a> or chat with WonderBot.</span>
         </div>
       </div>
     </main>
