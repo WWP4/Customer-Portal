@@ -7,166 +7,75 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
-    body {
-      background: #f9fafb;
-      font-family: 'Montserrat', 'Inter', Arial, sans-serif;
-    }
+    body { background: #f9fafb; font-family: 'Montserrat', 'Inter', Arial, sans-serif; }
     #toast { display: none; position: fixed; bottom: 2.5rem; right: 2.5rem; background: #2563eb; color: #fff; padding: 1rem 2rem; border-radius: 1rem; box-shadow: 0 4px 24px rgba(0,0,0,0.12); font-weight: bold; font-size: 1.1rem; z-index: 9999; opacity: 0; transition: opacity 0.2s;}
     #toast.show { display: block; opacity: 1;}
-    #auth-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.16); display: flex; align-items: center; justify-content: center; z-index: 9998; }
-    #auth-modal .box { background: #fff; border-radius: 1.5rem; box-shadow: 0 6px 32px rgba(0,0,0,0.15); padding: 2rem 2.5rem; width: 350px; }
-    #auth-modal label { font-weight: 600; }
-    #auth-modal input { margin-bottom: 1rem;}
   </style>
 </head>
 <body>
-  <div class="flex h-screen bg-gray-50">
-    <!-- Sidebar (unchanged) -->
-    <aside class="w-64 bg-gradient-to-b from-blue-900 to-blue-700 text-white flex flex-col shadow-lg">
-      <div class="flex items-center h-20 px-8">
-        <img src="https://static.showit.co/file/rsapIxLJQoKHad3l3EKPVA/248075/wonder_world_globe.png" class="h-10 w-10" alt="Logo">
-        <span class="ml-3 font-bold text-2xl tracking-tight">Wonder World</span>
+  <div id="auth-container" style="display:none">
+    <div class="flex min-h-screen items-center justify-center bg-gradient-to-b from-blue-100 to-blue-50">
+      <div class="bg-white rounded-2xl shadow-xl p-10 w-full max-w-md">
+        <div class="text-center mb-7">
+          <img src="https://static.showit.co/file/rsapIxLJQoKHad3l3EKPVA/248075/wonder_world_globe.png" class="h-12 mx-auto mb-2" alt="Logo">
+          <h2 class="text-2xl font-bold text-blue-900 mb-2">Welcome to Wonder World Portal</h2>
+          <p class="text-blue-700 text-sm">Please sign in or create your account to continue</p>
+        </div>
+        <div id="auth-error" class="text-red-600 text-sm mb-2 text-center"></div>
+        <input id="auth-email" type="email" class="w-full border rounded px-3 py-2 mb-2" placeholder="Email" autocomplete="email">
+        <input id="auth-pass" type="password" class="w-full border rounded px-3 py-2 mb-3" placeholder="Password" autocomplete="current-password">
+        <button id="login-btn" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-xl py-2 mb-2">Sign In</button>
+        <button id="signup-btn" class="w-full bg-white border border-blue-300 text-blue-700 font-semibold rounded-xl py-2 hover:bg-blue-100 mb-1">Create Account</button>
+        <div class="text-xs text-blue-700 text-center mt-1">Forgot your password? <a href="#" id="forgot-link" class="underline">Reset it</a></div>
+        <div id="auth-success" class="text-green-600 text-sm mt-2 text-center"></div>
       </div>
-      <nav class="flex-1 px-4 py-4 space-y-1 text-base">
-        <a href="index.html" class="flex items-center px-3 py-3 rounded-xl bg-blue-800 font-semibold gap-3">Dashboard</a>
-        <a href="projects.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">Projects</a>
-        <a href="quotes.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">Quotes</a>
-        <a href="grants.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">Grants</a>
-        <a href="resources.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">Resources</a>
-        <a href="community.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">Community</a>
-        <a href="support.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">Support</a>
-      </nav>
-      <div class="mb-8 px-4">
-        <a href="support.html" class="w-full block text-center bg-blue-700 hover:bg-blue-600 py-3 rounded-xl font-semibold shadow mt-6">Contact Support</a>
-      </div>
-    </aside>
-
-    <!-- Main Content Area -->
-    <main class="flex-1 p-12 overflow-y-auto">
-      <div id="dashboard">
-        <!-- Dashboard content is injected by JS if logged in -->
-        <div class="text-center text-xl text-blue-700 py-16">Loading...</div>
-      </div>
-    </main>
-    <!-- WonderBot Floating Widget -->
-    <button class="fixed bottom-8 right-8 bg-blue-700 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center z-50 hover:scale-105 transition">
-      <img src="https://static.showit.co/file/rsapIxLJQoKHad3l3EKPVA/248075/wonder_world_globe.png" alt="WonderBot" class="w-10 h-10"/>
-    </button>
-  </div>
-  <!-- Toast notification -->
-  <div id="toast">Link copied!</div>
-  <!-- Auth Modal -->
-  <div id="auth-modal" style="display:none">
-    <div class="box">
-      <h2 class="text-2xl font-bold mb-4" id="auth-title">Sign In</h2>
-      <label for="auth-email">Email</label>
-      <input id="auth-email" type="email" class="w-full border rounded px-3 py-2 mb-2" autocomplete="email">
-      <label for="auth-pass">Password</label>
-      <input id="auth-pass" type="password" class="w-full border rounded px-3 py-2 mb-2" autocomplete="current-password">
-      <button id="auth-action" class="bg-blue-700 hover:bg-blue-800 text-white w-full rounded-xl py-2 font-semibold mb-2"></button>
-      <div class="text-sm text-blue-600 text-center mb-2 cursor-pointer" id="switch-auth"></div>
-      <div class="text-xs text-red-600 text-center" id="auth-error"></div>
     </div>
   </div>
-  <script>
-    // === Supabase Setup ===
-    const supabaseUrl = 'https://YOUR_SUPABASE_PROJECT_URL.supabase.co';
-    const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-    // === Simple Auth Modal ===
-    let authMode = 'signin'; // or 'signup'
-    function showAuth(mode='signin') {
-      authMode = mode;
-      document.getElementById('auth-title').innerText = mode === 'signin' ? "Sign In" : "Sign Up";
-      document.getElementById('auth-action').innerText = mode === 'signin' ? "Sign In" : "Sign Up";
-      document.getElementById('switch-auth').innerText = mode === 'signin'
-        ? "Need an account? Sign Up"
-        : "Already have an account? Sign In";
-      document.getElementById('auth-modal').style.display = 'flex';
-      document.getElementById('auth-error').innerText = '';
-    }
-    function hideAuth() {
-      document.getElementById('auth-modal').style.display = 'none';
-    }
-    document.getElementById('switch-auth').onclick = function() {
-      showAuth(authMode === 'signin' ? 'signup' : 'signin');
-    }
-    document.getElementById('auth-action').onclick = async function() {
-      const email = document.getElementById('auth-email').value;
-      const password = document.getElementById('auth-pass').value;
-      let result;
-      if(authMode === 'signin') {
-        result = await supabase.auth.signInWithPassword({ email, password });
-        if(result.error) {
-          document.getElementById('auth-error').innerText = result.error.message;
-          return;
-        }
-      } else {
-        result = await supabase.auth.signUp({ email, password });
-        if(result.error) {
-          document.getElementById('auth-error').innerText = result.error.message;
-          return;
-        }
-      }
-      hideAuth();
-      loadDashboard();
-    }
-
-    // === Dashboard Rendering (User must be logged in) ===
-    async function loadDashboard() {
-      const { data: { user } } = await supabase.auth.getUser();
-      const dashboard = document.getElementById('dashboard');
-      if(!user) {
-        dashboard.innerHTML = `<div class="flex flex-col items-center py-24">
-          <div class="text-3xl font-bold text-blue-900 mb-4">Sign In to Access Your Projects</div>
-          <button class="bg-blue-700 text-white px-6 py-3 rounded-xl font-bold text-lg shadow-md hover:bg-blue-800 transition" onclick="showAuth('signin')">Sign In</button>
-          <button class="bg-white text-blue-700 border border-blue-300 px-6 py-3 rounded-xl font-bold text-lg shadow-md hover:bg-blue-100 transition mt-3" onclick="showAuth('signup')">Sign Up</button>
-        </div>`;
-        return;
-      }
-      // Fetch user's projects
-      const { data, error } = await supabase
-        .from('portal')
-        .select('*')
-        .order('created_at', { ascending: false });
-      dashboard.innerHTML = `
-      <div>
+  <div id="app-root" style="display:none">
+    <div class="flex h-screen bg-gray-50">
+      <!-- Sidebar -->
+      <aside class="w-64 bg-gradient-to-b from-blue-900 to-blue-700 text-white flex flex-col shadow-lg">
+        <div class="flex items-center h-20 px-8">
+          <img src="https://static.showit.co/file/rsapIxLJQoKHad3l3EKPVA/248075/wonder_world_globe.png" class="h-10 w-10" alt="Logo">
+          <span class="ml-3 font-bold text-2xl tracking-tight">Wonder World</span>
+        </div>
+        <nav class="flex-1 px-4 py-4 space-y-1 text-base">
+          <a href="index.html" class="flex items-center px-3 py-3 rounded-xl bg-blue-800 font-semibold gap-3">Dashboard</a>
+          <a href="projects.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">Projects</a>
+          <a href="quotes.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">Quotes</a>
+          <a href="grants.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">Grants</a>
+          <a href="resources.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">Resources</a>
+          <a href="community.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">Community</a>
+          <a href="support.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">Support</a>
+        </nav>
+        <div class="mb-8 px-4">
+          <button onclick="logout()" class="w-full block text-center bg-blue-700 hover:bg-blue-600 py-3 rounded-xl font-semibold shadow mt-6">Sign Out</button>
+        </div>
+      </aside>
+      <!-- Main Content Area -->
+      <main class="flex-1 p-12 overflow-y-auto">
         <div class="flex items-center justify-between mb-10">
           <div>
-            <h1 class="text-3xl font-bold text-blue-900">Welcome back${user.email ? ', ' + user.email : ''}!</h1>
+            <h1 id="welcome-msg" class="text-3xl font-bold text-blue-900"></h1>
             <p class="text-blue-700 text-lg">Your Playground Project Control Center</p>
-          </div>
-          <div class="flex items-center gap-4">
-            <button onclick="logout()" class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-semibold hover:bg-blue-200 transition">Sign Out</button>
           </div>
         </div>
         <div class="flex gap-4 mb-8">
           <a href="projects.html" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-xl px-6 py-3 shadow text-lg">Start New Project</a>
         </div>
         <div class="grid grid-cols-3 gap-8">
-          <!-- Projects List -->
+          <!-- Active Projects List -->
           <div class="col-span-2 bg-white rounded-2xl shadow p-7">
             <div class="flex items-center justify-between mb-4">
               <div class="font-semibold text-blue-900 text-xl">Active Projects</div>
               <button onclick="shareProjects()" class="bg-blue-100 text-blue-700 px-4 py-2 rounded-xl font-semibold hover:bg-blue-200 transition">Share Projects</button>
             </div>
             <div id="projects-list" class="space-y-3">
-              ${error ? `<div class="text-red-600">Error loading projects.</div>` :
-                (data && data.length > 0
-                  ? data.map(project => `
-                    <div class="bg-blue-50 rounded-lg p-5 flex items-center justify-between">
-                      <div>
-                        <div class="font-semibold text-blue-800 text-lg">${project.name}</div>
-                        <div class="text-blue-600 text-sm">${project.status || ''} &middot; $${project.budget ? Number(project.budget).toLocaleString() : 0}</div>
-                      </div>
-                      <a href="projects.html" class="bg-blue-700 text-white rounded-lg px-4 py-2 font-semibold hover:bg-blue-800">View</a>
-                    </div>
-                  `).join('')
-                  : `<div class="text-blue-600">No projects found. Start a new project!</div>`)}
+              <div class="text-blue-500">Loading projects...</div>
             </div>
           </div>
-          <!-- Right Column (referral/announcements can be static or dynamic) -->
+          <!-- Right Column (Referral/Announcements) -->
           <div class="flex flex-col gap-8">
             <div class="bg-white rounded-2xl shadow p-7">
               <div class="font-semibold text-blue-900 text-xl mb-3">Referral & Rewards</div>
@@ -181,16 +90,105 @@
             </div>
           </div>
         </div>
-      </div>
-      `;
+      </main>
+      <!-- WonderBot Floating Widget -->
+      <button class="fixed bottom-8 right-8 bg-blue-700 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center z-50 hover:scale-105 transition">
+        <img src="https://static.showit.co/file/rsapIxLJQoKHad3l3EKPVA/248075/wonder_world_globe.png" alt="WonderBot" class="w-10 h-10"/>
+      </button>
+    </div>
+  </div>
+  <!-- Toast notification -->
+  <div id="toast">Link copied!</div>
+  <script>
+    // === Supabase Setup ===
+    const supabaseUrl = 'https://YOUR_SUPABASE_URL.supabase.co';
+    const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    // === Auth Wall Logic ===
+    async function checkAuthAndRender() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        document.getElementById('app-root').style.display = "none";
+        document.getElementById('auth-container').style.display = "block";
+      } else {
+        document.getElementById('app-root').style.display = "block";
+        document.getElementById('auth-container').style.display = "none";
+        renderDashboard(user);
+      }
     }
 
+    // Sign In
+    document.getElementById('login-btn').onclick = async function() {
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-pass').value;
+      document.getElementById('auth-error').innerText = "";
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        document.getElementById('auth-error').innerText = error.message;
+      } else {
+        checkAuthAndRender();
+      }
+    };
+
+    // Sign Up
+    document.getElementById('signup-btn').onclick = async function() {
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-pass').value;
+      document.getElementById('auth-error').innerText = "";
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) {
+        document.getElementById('auth-error').innerText = error.message;
+      } else {
+        document.getElementById('auth-success').innerText = "Signup successful! Please check your email to confirm your account.";
+      }
+    };
+
+    // Password Reset
+    document.getElementById('forgot-link').onclick = async function() {
+      const email = document.getElementById('auth-email').value;
+      if (!email) {
+        document.getElementById('auth-error').innerText = "Enter your email first.";
+        return;
+      }
+      await supabase.auth.resetPasswordForEmail(email);
+      document.getElementById('auth-success').innerText = "Password reset email sent.";
+    };
+
+    // Render Dashboard (after auth)
+    async function renderDashboard(user) {
+      document.getElementById("welcome-msg").innerText = "Welcome back, " + (user.email ? user.email : "") + "!";
+      const { data, error } = await supabase
+        .from('portal')
+        .select('*')
+        .order('created_at', { ascending: false });
+      const list = document.getElementById('projects-list');
+      if (error) {
+        list.innerHTML = '<div class="text-red-600">Error loading projects.</div>';
+        return;
+      }
+      if (!data || data.length === 0) {
+        list.innerHTML = '<div class="text-blue-600">No projects found. Start a new project!</div>';
+        return;
+      }
+      list.innerHTML = data.map(project => `
+        <div class="bg-blue-50 rounded-lg p-5 flex items-center justify-between">
+          <div>
+            <div class="font-semibold text-blue-800 text-lg">${project.name}</div>
+            <div class="text-blue-600 text-sm">${project.status || ''} &middot; $${project.budget ? Number(project.budget).toLocaleString() : 0}</div>
+          </div>
+          <a href="projects.html" class="bg-blue-700 text-white rounded-lg px-4 py-2 font-semibold hover:bg-blue-800">View</a>
+        </div>
+      `).join('');
+    }
+
+    // Logout
     async function logout() {
       await supabase.auth.signOut();
-      loadDashboard();
+      checkAuthAndRender();
     }
 
-    // Toast for "share" button
+    // Toast for share button
     function shareProjects() {
       const url = window.location.href;
       navigator.clipboard.writeText(url).then(function() {
@@ -205,8 +203,13 @@
       }, 2000);
     }
 
-    // Auto-load dashboard on page load
-    loadDashboard();
+    // Listen for login state changes (tab switching, etc)
+    supabase.auth.onAuthStateChange((event, session) => {
+      checkAuthAndRender();
+    });
+
+    // On load
+    checkAuthAndRender();
   </script>
 </body>
 </html>
