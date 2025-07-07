@@ -4,10 +4,16 @@
   <meta charset="UTF-8" />
   <title>Wonder World Portal – Projects</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { background: #f9fafb; font-family: 'Montserrat', 'Inter', Arial, sans-serif; }
+    .modal-bg { background: rgba(0,0,0,0.4); }
+    .modal { min-width: 380px; max-width: 90vw; }
+    .modal input, .modal select { color: #0a2540; }
+  </style>
 </head>
 <body>
   <div class="flex h-screen bg-gray-50">
-    <!-- Sidebar (copy from index.html) -->
+    <!-- Sidebar -->
     <aside class="w-64 bg-gradient-to-b from-blue-900 to-blue-700 text-white flex flex-col shadow-lg">
       <div class="flex items-center h-20 px-8">
         <img src="https://static.showit.co/file/rsapIxLJQoKHad3l3EKPVA/248075/wonder_world_globe.png" class="h-10 w-10" alt="Logo">
@@ -15,31 +21,31 @@
       </div>
       <nav class="flex-1 px-4 py-4 space-y-1 text-base">
         <a href="index.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+          <span class="material-icons">dashboard</span>
           Dashboard
         </a>
         <a href="projects.html" class="flex items-center px-3 py-3 rounded-xl bg-blue-800 font-semibold gap-3">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+          <span class="material-icons">view_list</span>
           Projects
         </a>
         <a href="quotes.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/></svg>
+          <span class="material-icons">receipt</span>
           Quotes
         </a>
         <a href="grants.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <span class="material-icons">volunteer_activism</span>
           Grants
         </a>
         <a href="resources.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+          <span class="material-icons">library_books</span>
           Resources
         </a>
         <a href="community.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+          <span class="material-icons">groups</span>
           Community
         </a>
         <a href="support.html" class="flex items-center px-3 py-3 rounded-xl hover:bg-blue-700 gap-3">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+          <span class="material-icons">support</span>
           Support
         </a>
       </nav>
@@ -57,14 +63,14 @@
           <p class="text-blue-700 text-lg">Manage all your playground projects here.</p>
         </div>
         <div class="flex gap-4">
-          <input type="text" placeholder="Search projects..." class="border border-blue-200 rounded-lg px-4 py-2 text-blue-900 focus:outline-none" />
-          <button class="bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-xl px-6 py-3 shadow text-lg">Add New Project</button>
+          <input id="search" type="text" placeholder="Search projects..." class="border border-blue-200 rounded-lg px-4 py-2 text-blue-900 focus:outline-none" />
+          <button id="addProjectBtn" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-xl px-6 py-3 shadow text-lg">Add New Project</button>
         </div>
       </div>
 
       <!-- Projects Table/List/Grid -->
       <div class="bg-white rounded-2xl shadow p-8">
-        <table class="min-w-full">
+        <table class="min-w-full" id="projectsTable">
           <thead>
             <tr class="text-blue-900 text-left border-b-2 border-blue-100">
               <th class="py-3 px-4">Project Name</th>
@@ -75,52 +81,13 @@
               <th class="py-3 px-4 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- Example project row -->
-            <tr class="hover:bg-blue-50 transition">
-              <td class="py-4 px-4 font-semibold text-blue-800">Jefferson Elementary</td>
-              <td class="py-4 px-4"><span class="px-3 py-1 rounded-full text-xs bg-blue-100 text-blue-700 font-semibold">Planning</span></td>
-              <td class="py-4 px-4">5–12</td>
-              <td class="py-4 px-4">$42,000</td>
-              <td class="py-4 px-4">
-                <div class="w-32 h-3 bg-blue-100 rounded-full">
-                  <div class="h-3 bg-blue-700 rounded-full" style="width: 42%;"></div>
-                </div>
-                <span class="text-blue-700 text-xs font-semibold ml-2">42%</span>
-              </td>
-              <td class="py-4 px-4 flex gap-2 justify-end">
-                <button class="text-white bg-blue-700 rounded-lg px-4 py-2 text-sm font-semibold hover:bg-blue-800">View</button>
-                <button class="text-blue-700 bg-blue-100 rounded-lg px-4 py-2 text-sm font-semibold hover:bg-blue-200">Edit</button>
-                <button class="text-red-700 bg-red-100 rounded-lg px-4 py-2 text-sm font-semibold hover:bg-red-200">Delete</button>
-              </td>
-            </tr>
-            <!-- Add more project rows as needed -->
-            <tr class="hover:bg-blue-50 transition">
-              <td class="py-4 px-4 font-semibold text-blue-800">Springfield Church</td>
-              <td class="py-4 px-4"><span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700 font-semibold">Quoted</span></td>
-              <td class="py-4 px-4">All Ages</td>
-              <td class="py-4 px-4">$36,000</td>
-              <td class="py-4 px-4">
-                <div class="w-32 h-3 bg-blue-100 rounded-full">
-                  <div class="h-3 bg-blue-700 rounded-full" style="width: 70%;"></div>
-                </div>
-                <span class="text-blue-700 text-xs font-semibold ml-2">70%</span>
-              </td>
-              <td class="py-4 px-4 flex gap-2 justify-end">
-                <button class="text-white bg-blue-700 rounded-lg px-4 py-2 text-sm font-semibold hover:bg-blue-800">View</button>
-                <button class="text-blue-700 bg-blue-100 rounded-lg px-4 py-2 text-sm font-semibold hover:bg-blue-200">Edit</button>
-                <button class="text-red-700 bg-red-100 rounded-lg px-4 py-2 text-sm font-semibold hover:bg-red-200">Delete</button>
-              </td>
-            </tr>
-            <!-- Add a row for "Add new project" if you wish -->
+          <tbody id="projectsBody">
+            <!-- JavaScript fills this in -->
           </tbody>
         </table>
-        <!-- If you have no projects, show a friendly empty state -->
-        <!--
-        <div class="text-center py-20 text-blue-700 text-lg">
-          No projects yet. <button class="text-blue-900 underline font-bold">Add your first project</button>
+        <div id="emptyState" class="text-center py-20 text-blue-700 text-lg hidden">
+          No projects yet. <button id="quickAddBtn" class="text-blue-900 underline font-bold">Add your first project</button>
         </div>
-        -->
       </div>
     </main>
 
@@ -129,5 +96,205 @@
       <img src="https://static.showit.co/file/rsapIxLJQoKHad3l3EKPVA/248075/wonder_world_globe.png" alt="WonderBot" class="w-10 h-10"/>
     </button>
   </div>
+
+  <!-- Project Modal (Add/Edit/View) -->
+  <div id="modalBg" class="modal-bg fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div class="modal bg-white rounded-2xl shadow-lg p-8 relative animate-fadeIn">
+      <button onclick="closeModal()" class="absolute top-3 right-4 text-blue-900 text-2xl font-bold">&times;</button>
+      <div id="modalContent">
+        <!-- JS fills in form or details here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- JS logic -->
+  <script>
+    // Example fake projects (you can change/remove)
+    let projects = [
+      {
+        id: 1,
+        name: 'Jefferson Elementary',
+        status: 'Planning',
+        ageGroup: '5–12',
+        budget: 42000,
+        progress: 42,
+        details: 'Playground for elementary school students.',
+      },
+      {
+        id: 2,
+        name: 'Springfield Church',
+        status: 'Quoted',
+        ageGroup: 'All Ages',
+        budget: 36000,
+        progress: 70,
+        details: 'All-ages playground for church community.',
+      }
+    ];
+    let modalMode = 'add'; // 'add' or 'view' or 'edit'
+    let editingId = null;
+
+    function $(id) { return document.getElementById(id); }
+
+    function renderProjects() {
+      const tbody = $('projectsBody');
+      tbody.innerHTML = '';
+      let filtered = projects;
+      const q = $('search').value.toLowerCase();
+      if (q) filtered = projects.filter(p => p.name.toLowerCase().includes(q));
+      if (filtered.length === 0) {
+        $('emptyState').classList.remove('hidden');
+        return;
+      } else {
+        $('emptyState').classList.add('hidden');
+      }
+      filtered.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-blue-50 transition';
+        tr.innerHTML = `
+          <td class="py-4 px-4 font-semibold text-blue-800">${p.name}</td>
+          <td class="py-4 px-4">
+            <span class="px-3 py-1 rounded-full text-xs ${p.status === 'Planning' ? 'bg-blue-100 text-blue-700' : p.status === 'Quoted' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'} font-semibold">${p.status}</span>
+          </td>
+          <td class="py-4 px-4">${p.ageGroup}</td>
+          <td class="py-4 px-4">$${p.budget.toLocaleString()}</td>
+          <td class="py-4 px-4">
+            <div class="w-32 h-3 bg-blue-100 rounded-full">
+              <div class="h-3 bg-blue-700 rounded-full" style="width: ${p.progress}%"></div>
+            </div>
+            <span class="text-blue-700 text-xs font-semibold ml-2">${p.progress}%</span>
+          </td>
+          <td class="py-4 px-4 flex gap-2 justify-end">
+            <button onclick="viewProject(${p.id})" class="text-white bg-blue-700 rounded-lg px-4 py-2 text-sm font-semibold hover:bg-blue-800">View</button>
+            <button onclick="editProject(${p.id})" class="text-blue-700 bg-blue-100 rounded-lg px-4 py-2 text-sm font-semibold hover:bg-blue-200">Edit</button>
+            <button onclick="deleteProject(${p.id})" class="text-red-700 bg-red-100 rounded-lg px-4 py-2 text-sm font-semibold hover:bg-red-200">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openModal(content) {
+      $('modalContent').innerHTML = content;
+      $('modalBg').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      $('modalBg').classList.add('hidden');
+      modalMode = 'add';
+      editingId = null;
+    }
+
+    function viewProject(id) {
+      const p = projects.find(x => x.id === id);
+      openModal(`
+        <div>
+          <h2 class="text-2xl font-bold text-blue-900 mb-3">${p.name}</h2>
+          <div class="mb-1"><b>Status:</b> ${p.status}</div>
+          <div class="mb-1"><b>Age Group:</b> ${p.ageGroup}</div>
+          <div class="mb-1"><b>Budget:</b> $${p.budget.toLocaleString()}</div>
+          <div class="mb-1"><b>Progress:</b> ${p.progress}%</div>
+          <div class="mb-3"><b>Details:</b> ${p.details || '-'}</div>
+          <button onclick="closeModal()" class="bg-blue-700 text-white rounded-lg px-6 py-2 font-semibold mt-4">Close</button>
+        </div>
+      `);
+    }
+
+    function editProject(id) {
+      const p = projects.find(x => x.id === id);
+      modalMode = 'edit';
+      editingId = id;
+      openModal(`
+        <h2 class="text-xl font-bold text-blue-900 mb-4">Edit Project</h2>
+        <form onsubmit="saveProject(event)">
+          <input type="hidden" name="id" value="${p.id}">
+          <label class="block mb-2 font-semibold">Project Name</label>
+          <input required name="name" class="w-full border rounded px-3 py-2 mb-3" value="${p.name}">
+          <label class="block mb-2 font-semibold">Status</label>
+          <select name="status" class="w-full border rounded px-3 py-2 mb-3">
+            <option${p.status==='Planning'?' selected':''}>Planning</option>
+            <option${p.status==='Quoted'?' selected':''}>Quoted</option>
+            <option${p.status==='Ordered'?' selected':''}>Ordered</option>
+            <option${p.status==='Installed'?' selected':''}>Installed</option>
+          </select>
+          <label class="block mb-2 font-semibold">Age Group</label>
+          <input required name="ageGroup" class="w-full border rounded px-3 py-2 mb-3" value="${p.ageGroup}">
+          <label class="block mb-2 font-semibold">Budget</label>
+          <input required name="budget" type="number" min="0" class="w-full border rounded px-3 py-2 mb-3" value="${p.budget}">
+          <label class="block mb-2 font-semibold">Progress (%)</label>
+          <input required name="progress" type="number" min="0" max="100" class="w-full border rounded px-3 py-2 mb-3" value="${p.progress}">
+          <label class="block mb-2 font-semibold">Details</label>
+          <textarea name="details" class="w-full border rounded px-3 py-2 mb-3">${p.details||''}</textarea>
+          <button class="bg-blue-700 text-white rounded-lg px-6 py-2 font-semibold mt-2">Save</button>
+          <button type="button" onclick="closeModal()" class="ml-4 bg-gray-100 text-blue-900 rounded-lg px-6 py-2 font-semibold mt-2">Cancel</button>
+        </form>
+      `);
+    }
+
+    function addProjectForm() {
+      modalMode = 'add';
+      editingId = null;
+      openModal(`
+        <h2 class="text-xl font-bold text-blue-900 mb-4">Add New Project</h2>
+        <form onsubmit="saveProject(event)">
+          <label class="block mb-2 font-semibold">Project Name</label>
+          <input required name="name" class="w-full border rounded px-3 py-2 mb-3">
+          <label class="block mb-2 font-semibold">Status</label>
+          <select name="status" class="w-full border rounded px-3 py-2 mb-3">
+            <option>Planning</option>
+            <option>Quoted</option>
+            <option>Ordered</option>
+            <option>Installed</option>
+          </select>
+          <label class="block mb-2 font-semibold">Age Group</label>
+          <input required name="ageGroup" class="w-full border rounded px-3 py-2 mb-3">
+          <label class="block mb-2 font-semibold">Budget</label>
+          <input required name="budget" type="number" min="0" class="w-full border rounded px-3 py-2 mb-3">
+          <label class="block mb-2 font-semibold">Progress (%)</label>
+          <input required name="progress" type="number" min="0" max="100" class="w-full border rounded px-3 py-2 mb-3" value="0">
+          <label class="block mb-2 font-semibold">Details</label>
+          <textarea name="details" class="w-full border rounded px-3 py-2 mb-3"></textarea>
+          <button class="bg-blue-700 text-white rounded-lg px-6 py-2 font-semibold mt-2">Add Project</button>
+          <button type="button" onclick="closeModal()" class="ml-4 bg-gray-100 text-blue-900 rounded-lg px-6 py-2 font-semibold mt-2">Cancel</button>
+        </form>
+      `);
+    }
+
+    function saveProject(e) {
+      e.preventDefault();
+      const f = e.target;
+      const data = {
+        name: f.name.value,
+        status: f.status.value,
+        ageGroup: f.ageGroup.value,
+        budget: Number(f.budget.value),
+        progress: Number(f.progress.value),
+        details: f.details.value,
+      };
+      if (modalMode === 'edit' && editingId) {
+        const i = projects.findIndex(p => p.id === editingId);
+        projects[i] = { ...projects[i], ...data };
+      } else {
+        const maxId = projects.length > 0 ? Math.max(...projects.map(x=>x.id)) : 0;
+        projects.push({ ...data, id: maxId+1 });
+      }
+      closeModal();
+      renderProjects();
+    }
+
+    function deleteProject(id) {
+      if (confirm('Delete this project?')) {
+        projects = projects.filter(p => p.id !== id);
+        renderProjects();
+      }
+    }
+
+    // Modal openers
+    document.getElementById('addProjectBtn').onclick = addProjectForm;
+    document.getElementById('quickAddBtn') && (document.getElementById('quickAddBtn').onclick = addProjectForm);
+    document.getElementById('search').oninput = renderProjects;
+
+    // On load
+    renderProjects();
+  </script>
 </body>
 </html>
