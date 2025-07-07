@@ -101,116 +101,118 @@
   <!-- SCRIPTS AT END -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // === Supabase Setup ===
-    const supabaseUrl = 'https://gdwodqwhjrksjhxazuio.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdkd29kcXdoanJrc2poeGF6dWlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzMTU3NzcsImV4cCI6MjA2Njg5MTc3N30.Zq0lZRK6X6vVVwdhqkNVwMLsGPOhDFrYoEyUwtkbG0o';
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    window.addEventListener("DOMContentLoaded", function() {
 
-    // === Auth Wall Logic ===
-    async function checkAuthAndRender() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        document.getElementById('app-root').style.display = "none";
-        document.getElementById('auth-container').style.display = "block";
-      } else {
-        document.getElementById('app-root').style.display = "block";
-        document.getElementById('auth-container').style.display = "none";
-        renderDashboard(user);
+      const supabaseUrl = 'https://gdwodqwhjrksjhxazuio.supabase.co';
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdkd29kcXdoanJrc2poeGF6dWlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzMTU3NzcsImV4cCI6MjA2Njg5MTc3N30.Zq0lZRK6X6vVVwdhqkNVwMLsGPOhDFrYoEyUwtkbG0o';
+      const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+      // Auth Wall Logic
+      async function checkAuthAndRender() {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          document.getElementById('app-root').style.display = "none";
+          document.getElementById('auth-container').style.display = "block";
+        } else {
+          document.getElementById('app-root').style.display = "block";
+          document.getElementById('auth-container').style.display = "none";
+          renderDashboard(user);
+        }
       }
-    }
 
-    // Sign In
-    document.getElementById('login-btn').onclick = async function() {
-      const email = document.getElementById('auth-email').value;
-      const password = document.getElementById('auth-pass').value;
-      document.getElementById('auth-error').innerText = "";
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        document.getElementById('auth-error').innerText = error.message;
-      } else {
+      // Sign In
+      document.getElementById('login-btn').onclick = async function() {
+        const email = document.getElementById('auth-email').value;
+        const password = document.getElementById('auth-pass').value;
+        document.getElementById('auth-error').innerText = "";
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          document.getElementById('auth-error').innerText = error.message;
+        } else {
+          checkAuthAndRender();
+        }
+      };
+
+      // Sign Up
+      document.getElementById('signup-btn').onclick = async function() {
+        const email = document.getElementById('auth-email').value;
+        const password = document.getElementById('auth-pass').value;
+        document.getElementById('auth-error').innerText = "";
+        const { error } = await supabase.auth.signUp({ email, password });
+        if (error) {
+          document.getElementById('auth-error').innerText = error.message;
+        } else {
+          document.getElementById('auth-success').innerText = "Signup successful! Please check your email to confirm your account.";
+        }
+      };
+
+      // Password Reset
+      document.getElementById('forgot-link').onclick = async function() {
+        const email = document.getElementById('auth-email').value;
+        if (!email) {
+          document.getElementById('auth-error').innerText = "Enter your email first.";
+          return;
+        }
+        await supabase.auth.resetPasswordForEmail(email);
+        document.getElementById('auth-success').innerText = "Password reset email sent.";
+      };
+
+      // Render Dashboard (after auth)
+      async function renderDashboard(user) {
+        document.getElementById("welcome-msg").innerText = "Welcome back, " + (user.email ? user.email : "") + "!";
+        const { data, error } = await supabase
+          .from('portal')
+          .select('*')
+          .order('created_at', { ascending: false });
+        const list = document.getElementById('projects-list');
+        if (error) {
+          list.innerHTML = '<div class="text-red-600">Error loading projects.</div>';
+          return;
+        }
+        if (!data || data.length === 0) {
+          list.innerHTML = '<div class="text-blue-600">No projects found. Start a new project!</div>';
+          return;
+        }
+        list.innerHTML = data.map(project => `
+          <div class="bg-blue-50 rounded-lg p-5 flex items-center justify-between">
+            <div>
+              <div class="font-semibold text-blue-800 text-lg">${project.name}</div>
+              <div class="text-blue-600 text-sm">${project.status || ''} &middot; $${project.budget ? Number(project.budget).toLocaleString() : 0}</div>
+            </div>
+            <a href="projects.html" class="bg-blue-700 text-white rounded-lg px-4 py-2 font-semibold hover:bg-blue-800">View</a>
+          </div>
+        `).join('');
+      }
+
+      // Logout
+      window.logout = async function() {
+        await supabase.auth.signOut();
         checkAuthAndRender();
       }
-    };
 
-    // Sign Up
-    document.getElementById('signup-btn').onclick = async function() {
-      const email = document.getElementById('auth-email').value;
-      const password = document.getElementById('auth-pass').value;
-      document.getElementById('auth-error').innerText = "";
-      const { error } = await supabase.auth.signUp({ email, password });
-      if (error) {
-        document.getElementById('auth-error').innerText = error.message;
-      } else {
-        document.getElementById('auth-success').innerText = "Signup successful! Please check your email to confirm your account.";
+      // Toast for share button
+      window.shareProjects = function() {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(function() {
+          showToast();
+        });
       }
-    };
-
-    // Password Reset
-    document.getElementById('forgot-link').onclick = async function() {
-      const email = document.getElementById('auth-email').value;
-      if (!email) {
-        document.getElementById('auth-error').innerText = "Enter your email first.";
-        return;
+      function showToast() {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2000);
       }
-      await supabase.auth.resetPasswordForEmail(email);
-      document.getElementById('auth-success').innerText = "Password reset email sent.";
-    };
 
-    // Render Dashboard (after auth)
-    async function renderDashboard(user) {
-      document.getElementById("welcome-msg").innerText = "Welcome back, " + (user.email ? user.email : "") + "!";
-      const { data, error } = await supabase
-        .from('portal')
-        .select('*')
-        .order('created_at', { ascending: false });
-      const list = document.getElementById('projects-list');
-      if (error) {
-        list.innerHTML = '<div class="text-red-600">Error loading projects.</div>';
-        return;
-      }
-      if (!data || data.length === 0) {
-        list.innerHTML = '<div class="text-blue-600">No projects found. Start a new project!</div>';
-        return;
-      }
-      list.innerHTML = data.map(project => `
-        <div class="bg-blue-50 rounded-lg p-5 flex items-center justify-between">
-          <div>
-            <div class="font-semibold text-blue-800 text-lg">${project.name}</div>
-            <div class="text-blue-600 text-sm">${project.status || ''} &middot; $${project.budget ? Number(project.budget).toLocaleString() : 0}</div>
-          </div>
-          <a href="projects.html" class="bg-blue-700 text-white rounded-lg px-4 py-2 font-semibold hover:bg-blue-800">View</a>
-        </div>
-      `).join('');
-    }
-
-    // Logout
-    async function logout() {
-      await supabase.auth.signOut();
-      checkAuthAndRender();
-    }
-
-    // Toast for share button
-    function shareProjects() {
-      const url = window.location.href;
-      navigator.clipboard.writeText(url).then(function() {
-        showToast();
+      // Listen for login state changes (tab switching, etc)
+      supabase.auth.onAuthStateChange((event, session) => {
+        checkAuthAndRender();
       });
-    }
-    function showToast() {
-      const toast = document.getElementById('toast');
-      toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 2000);
-    }
 
-    // Listen for login state changes (tab switching, etc)
-    supabase.auth.onAuthStateChange((event, session) => {
+      // On load
       checkAuthAndRender();
     });
-
-    // On load
-    window.onload = checkAuthAndRender;
   </script>
 </body>
 </html>
