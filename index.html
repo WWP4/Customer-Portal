@@ -105,11 +105,11 @@
 
       const supabaseUrl = 'https://gdwodqwhjrksjhxazuio.supabase.co';
       const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdkd29kcXdoanJrc2poeGF6dWlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzMTU3NzcsImV4cCI6MjA2Njg5MTc3N30.Zq0lZRK6X6vVVwdhqkNVwMLsGPOhDFrYoEyUwtkbG0o';
-      const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+      const sb = supabase.createClient(supabaseUrl, supabaseKey);
 
       // Auth Wall Logic
       async function checkAuthAndRender() {
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user } } = await sb.auth.getUser();
         if (!user) {
           document.getElementById('app-root').style.display = "none";
           document.getElementById('auth-container').style.display = "block";
@@ -125,7 +125,7 @@
         const email = document.getElementById('auth-email').value;
         const password = document.getElementById('auth-pass').value;
         document.getElementById('auth-error').innerText = "";
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await sb.auth.signInWithPassword({ email, password });
         if (error) {
           document.getElementById('auth-error').innerText = error.message;
         } else {
@@ -138,7 +138,7 @@
         const email = document.getElementById('auth-email').value;
         const password = document.getElementById('auth-pass').value;
         document.getElementById('auth-error').innerText = "";
-        const { error } = await supabase.auth.signUp({ email, password });
+        const { error } = await sb.auth.signUp({ email, password });
         if (error) {
           document.getElementById('auth-error').innerText = error.message;
         } else {
@@ -153,14 +153,14 @@
           document.getElementById('auth-error').innerText = "Enter your email first.";
           return;
         }
-        await supabase.auth.resetPasswordForEmail(email);
+        await sb.auth.resetPasswordForEmail(email);
         document.getElementById('auth-success').innerText = "Password reset email sent.";
       };
 
       // Render Dashboard (after auth)
       async function renderDashboard(user) {
         document.getElementById("welcome-msg").innerText = "Welcome back, " + (user.email ? user.email : "") + "!";
-        const { data, error } = await supabase
+        const { data, error } = await sb
           .from('portal')
           .select('*')
           .order('created_at', { ascending: false });
@@ -186,7 +186,7 @@
 
       // Logout
       window.logout = async function() {
-        await supabase.auth.signOut();
+        await sb.auth.signOut();
         checkAuthAndRender();
       }
 
@@ -206,7 +206,7 @@
       }
 
       // Listen for login state changes (tab switching, etc)
-      supabase.auth.onAuthStateChange((event, session) => {
+      sb.auth.onAuthStateChange((event, session) => {
         checkAuthAndRender();
       });
 
